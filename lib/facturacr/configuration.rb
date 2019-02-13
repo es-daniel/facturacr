@@ -13,7 +13,11 @@ module FE
     attr_accessor :environment
     attr_accessor :file_path
     attr_accessor :mode
-    
+    attr_accessor :token
+    attr_accessor :token_expiration
+    attr_accessor :refresh_token
+    attr_accessor :refresh_token_expiration
+
     
     def initialize
       @environment = "development"
