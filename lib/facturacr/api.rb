@@ -56,7 +56,7 @@ module FE
 
     def send_document(payload)
       authenticate
-      response = RestClient.post "#{@document_endpoint}/recepcion", payload.to_json, {:Authorization=> "bearer #{@token}", content_type: :json}
+      response = RestClient.post "#{@document_endpoint}/recepcion", payload.to_json, { Authorization: "bearer #{@token}", content_type: :json}
       if response.code.eql?(200) || response.code.eql?(202)
         @check_location = response.headers[:location]
         puts "CheckLocation: #{@check_location}"
@@ -69,19 +69,19 @@ module FE
 
     def get_document_status(key)
       authenticate
-      response = RestClient.get "#{@document_endpoint}/recepcion/#{key}", {:Authorization=> "bearer #{@token}", content_type: :json}
+      response = RestClient.get "#{@document_endpoint}/recepcion/#{key}", { Authorization: "bearer #{@token}", content_type: :json }
       return FE::Api::DocumentStatus.new(response)
     end
 
     def get_document(key)
       authenticate
-      response = RestClient.get "#{@document_endpoint}/comprobantes/#{key}", {:Authorization=> "bearer #{@token}", content_type: :json}
+      response = RestClient.get "#{@document_endpoint}/comprobantes/#{key}", { Authorization: "bearer #{@token}", content_type: :json }
       JSON.parse(response)
     end
 
     def get_documents
       authenticate
-      response = RescClient.get "#{@document_endpoint}/comprobantes", {:Authorization => "bearer #{@token}", content_type: :json }
+      response = RestClient.get "#{@document_endpoint}/comprobantes", { Authorization: "bearer #{@token}", content_type: :json }
       JSON.parse(response)
     end
 
