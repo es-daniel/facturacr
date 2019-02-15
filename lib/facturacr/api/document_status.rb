@@ -7,12 +7,13 @@ module FE
     class DocumentStatus
       
       attr_reader :document
-      attr_accessor  :json, :xml, :key, :date, :status
+      attr_accessor  :json, :xml, :key, :date, :status, :response_xml
       
       def initialize(json)
         @json = json
         @response = JSON.parse(json)
         @xml = Base64.decode64(@response["respuesta-xml"]) if @response["respuesta-xml"]
+        @response_xml = @response["respuesta-xml"] if @response["respuesta-xml"]
         @status = @response["ind-estado"]
         @date = @response["fecha"]
         @key = @response["clave"]
