@@ -92,7 +92,7 @@ module FE
     end 
     
     def sequence
-      cons = ("%010d" % @number)
+      cons = @number.rjust(10, '0')
       "#{headquarters}#{terminal}#{@document_type}#{cons}"
     end
   
