@@ -42,8 +42,8 @@ module FE
         current_date = Time.now.in_time_zone("Central America")
         @configuration.token = @token = JSON.parse(response)['access_token']
         @configuration.refresh_token =  @refresh_token = JSON.parse(response)['refresh_token']
-        @configuration.token_expiration = @token_expiration = (current_date + (JSON.parse(response)['expires_in'].to_i - 4.minutes.to_i).seconds)
-        @configuration.refresh_token_expiration = @refresh_token_expiration = (current_date + (JSON.parse(response)['refresh_expires_in'].to_i - 4.minutes.to_i).seconds)
+        @configuration.token_expiration = @token_expiration = (current_date + (JSON.parse(response)['expires_in'].to_i - 5).seconds)
+        @configuration.refresh_token_expiration = @refresh_token_expiration = (current_date + (JSON.parse(response)['refresh_expires_in'].to_i - 5).seconds)
       end
     end
 
@@ -52,6 +52,7 @@ module FE
     end
 
     def refresh_tokens
+      puts 'REFRESH TOKEN'
       RestClient.post @authentication_endpoint, refresh_token_auth_data
     end
 
