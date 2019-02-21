@@ -11,6 +11,7 @@ module FE
                   :token, :refresh_token, :token_expiration, :refresh_token_expiration
 
     def initialize(configuration = nil)
+      @configuration = configuration
       @authentication_endpoint = (configuration || FE.configuration).authentication_endpoint
       @document_endpoint = (configuration || FE.configuration).documents_endpoint
       @username = (configuration || FE.configuration).api_username
@@ -25,6 +26,7 @@ module FE
 
     def authenticate
       check_token
+      @configuration.save_config
     rescue => e
       puts "AUTH ERROR: #{e.message}".red
       raise e
@@ -38,10 +40,10 @@ module FE
                  end
       if response
         current_date = Time.now.in_time_zone("Central America")
-        @token = JSON.parse(response)['access_token']
-        @refresh_token = JSON.parse(response)['refresh_token']
-        @token_expiration = (current_date + (JSON.parse(response)['expires_in'].to_i - 5).seconds)
-        @refresh_token_expiration = (current_date + (JSON.parse(response)['refresh_expires_in'].to_i - 5).seconds)
+        @configuration.token = @token = JSON.parse(response)['access_token']
+        @configuration.refresh_token =  @refresh_token = JSON.parse(response)['refresh_token']
+        @configuration.token_expiration = @token_expiration = (current_date + (JSON.parse(response)['expires_in'].to_i - 4.minutes.to_i).seconds)
+        @configuration.refresh_token_expiration = @refresh_token_expiration = (current_date + (JSON.parse(response)['refresh_expires_in'].to_i - 4.minutes.to_i).seconds)
       end
     end
 
@@ -70,7 +72,7 @@ module FE
     def get_document_status(key)
       authenticate
       response = RestClient.get "#{@document_endpoint}/recepcion/#{key}", { Authorization: "bearer #{@token}", content_type: :json }
-      return FE::Api::DocumentStatus.new(response)
+      FE::Api::DocumentStatus.new(response)
     end
 
     def get_document(key)
