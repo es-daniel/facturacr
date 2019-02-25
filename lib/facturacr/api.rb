@@ -52,8 +52,9 @@ module FE
     end
 
     def refresh_tokens
-      puts 'REFRESH TOKEN'
       RestClient.post @authentication_endpoint, refresh_token_auth_data
+    rescue
+      new_token
     end
 
 
